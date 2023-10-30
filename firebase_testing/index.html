@@ -3,9 +3,8 @@
 <head>
 </head>
 <body>
-    <script src=
-    "https://www.gstatic.com/firebasejs/3.7.4/firebase.js">
-        </script>
+    <link rel="manifest" href="<%= asset_path 'manifest.json' %>">
+    <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDBKPQAdMr1RrRyxGC6p1Zfb4aS8ZrJipo",
@@ -15,17 +14,18 @@
             messagingSenderId: "635620493547",
             appId: "1:635620493547:web:809da75576131ed99e96ae"
         };
-
+        var current_token = null;
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
+        var app = firebase.initializeApp(firebaseConfig);
 
         // Initialize Firebase Cloud Messaging and get a reference to the service
-        const messaging = firebase.messaging();
+        var messaging = firebase.messaging(app);
 
         // Add the public key generated from the console here.
         messaging.requestPermission().then(function() {
             return messaging.getToken();
         }).then(function(token) {
+            current_token = token;
             console.log("Token: ", token);
         }).catch(function(err) {
             console.log("Denied: ", err);
@@ -33,6 +33,7 @@
 
         messaging.onMessage(function(payload) {
             console.log('onMessage: ', payload);
+            alert("Title: " + payload["notification"]["title"] + "  Body: " + payload["notification"]["body"]);
         });
     </script>
 <h2>Demo JavaScript</h2>
